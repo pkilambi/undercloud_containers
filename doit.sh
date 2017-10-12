@@ -107,6 +107,8 @@ if [ ! -d $HOME/python-tripleoclient ]; then
 
   # Make it so heat never exits (conflicts)
   #git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/19/508319/1 && git cherry-pick FETCH_HEAD
+  # Support for undercloud install
+  git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/50/511350/3 && git cherry-pick FETCH_HEAD
 
   # Support for undercloud install
   git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/50/511350/4 && git cherry-pick FETCH_HEAD
@@ -195,23 +197,8 @@ else
 fi
 
 cat > $HOME/run.sh <<-EOF_CAT
-<<<<<<< HEAD
 export THT_HOME=$HOME/tripleo-heat-templates
 time openstack undercloud install --experimental \\
-=======
-time sudo openstack undercloud deploy \\
---templates=$HOME/tripleo-heat-templates \\
---heat-native \\
---local-ip=$LOCAL_IP \\
---keep-running \\
--e $HOME/tripleo-heat-templates/environments/services-docker/ironic.yaml \\
--e $HOME/tripleo-heat-templates/environments/services-docker/mistral.yaml \\
--e $HOME/tripleo-heat-templates/environments/services-docker/zaqar.yaml \\
--e $HOME/tripleo-heat-templates/environments/docker.yaml \\
--e $HOME/custom.yaml \\
--e $HOME/containers-rdo.yaml \\
--e $HOME/tripleo-heat-templates/environments/config-download-environment.yaml \\
->>>>>>> Add in patch to remove fake_keystone
 | tee openstack_undercloud_deploy.out | $cat
 EOF_CAT
 chmod 755 $HOME/run.sh
