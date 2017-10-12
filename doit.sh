@@ -100,6 +100,8 @@ if [ ! -d $HOME/python-tripleoclient ]; then
   git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/18/508618/1 && git cherry-pick FETCH_HEAD
   # Support to run ansible directly:
   git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/86/509586/1 && git cherry-pick FETCH_HEAD
+  # Support for undercloud install
+  git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/50/511350/3 && git cherry-pick FETCH_HEAD
 
   sudo python setup.py install
   cd
@@ -186,17 +188,8 @@ else
 fi
 
 cat > $HOME/run.sh <<-EOF_CAT
-time sudo openstack undercloud deploy \\
---templates=$HOME/tripleo-heat-templates \\
---local-ip=$LOCAL_IP \\
---keep-running \\
--e $HOME/tripleo-heat-templates/environments/services-docker/ironic.yaml \\
--e $HOME/tripleo-heat-templates/environments/services-docker/mistral.yaml \\
--e $HOME/tripleo-heat-templates/environments/services-docker/zaqar.yaml \\
--e $HOME/tripleo-heat-templates/environments/docker.yaml \\
--e $HOME/custom.yaml \\
--e $HOME/containers-rdo.yaml \\
--e $HOME/tripleo-heat-templates/environments/config-download-environment.yaml \\
+export THT_HOME=$HOME/tripleo-heat-templates
+time openstack undercloud install --experimental \\
 | tee openstack_undercloud_deploy.out | $cat
 EOF_CAT
 chmod 755 $HOME/run.sh
@@ -207,6 +200,8 @@ chmod 755 $HOME/run.sh
 #  - This one doesn't work but it should (apparently auth issues):
 #openstack overcloud container image prepare --tag passed-ci --namespace trunk.registry.rdoproject.org/master --env-file $HOME/containers-rdo.yaml
 #  - This one works:
+openstack overcloud container image prepare --namespace=172.19.0.2:8787/tripleoupstream --env-file=$HOME/containers.yaml
+
 openstack overcloud container image prepare --tag passed-ci --namespace tripleopike --env-file $HOME/containers-rdo.yaml
 # Note that there is a tripleo-ci-testing tag in dockerhub but it's not being updated.
 
