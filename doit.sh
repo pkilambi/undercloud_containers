@@ -108,7 +108,7 @@ if [ ! -d $HOME/python-tripleoclient ]; then
   # Make it so heat never exits (conflicts)
   #git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/19/508319/1 && git cherry-pick FETCH_HEAD
   # Support for undercloud install
-  git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/50/511350/3 && git cherry-pick FETCH_HEAD
+  git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/50/511350/4 && git cherry-pick FETCH_HEAD
 
   # Support for undercloud install
   git fetch https://git.openstack.org/openstack/python-tripleoclient refs/changes/50/511350/4 && git cherry-pick FETCH_HEAD
